@@ -50,7 +50,7 @@ public class CamelRouter extends RouteBuilder {
         .log("New incoming request")
         	.choice()
             	.when().simple("${body.requestType} == 'Debit'")
-                	.log("Debit transaction")
+                	.log("Debit transaction ... new change")
                 	.to("direct:debit")		
                 .when().simple("${body.requestType} == 'Credit'")
                 	.log("Credit transaction")	
