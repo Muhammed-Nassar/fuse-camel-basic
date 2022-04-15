@@ -3,8 +3,8 @@ package com.redhat.fuse.boosters.rest.http;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.rest.RestBindingMode;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
 import com.redhat.fuse.boosters.rest.http.pojos.*;
 
 /**
@@ -14,6 +14,8 @@ import com.redhat.fuse.boosters.rest.http.pojos.*;
 @Component
 public class CamelRouter extends RouteBuilder {
 
+	@Value("${sms.service.url}")
+	String SMS_SERVICE_URL;
     @Override
     public void configure() throws Exception {
 
@@ -70,6 +72,12 @@ public class CamelRouter extends RouteBuilder {
         		.when().simple("${body.accountType} == 'Card'")
         			.log("Checking card # and card status")
         			.log("Send SMS")
+        			.setBody().simple("")
+        			//.setHeader(Exchange.HTTP_URL).simple(SMS_SERVICE_URL)
+        			.setHeader(Exchange.HTTP_METHOD, constant("GET"))
+        			.to(SMS_SERVICE_URL+"?bridgeEndpoint=true")
+        			.convertBodyTo(String.class)
+        			.log("${body}")
         		.when().simple("${body.accountType} == 'Account'")
         			.log("Checking card # and card status")
         			.log("Send SMS")
