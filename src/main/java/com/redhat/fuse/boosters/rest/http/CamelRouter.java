@@ -16,6 +16,7 @@ public class CamelRouter extends RouteBuilder {
 
 	@Value("${sms.service.url}")
 	String SMS_SERVICE_URL;
+	
     @Override
     public void configure() throws Exception {
 
